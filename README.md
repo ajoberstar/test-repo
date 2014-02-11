@@ -1,3 +1,3 @@
-# README.md
+# Testing
 
-This is a fake readme.
+Publish from gradle-git.
