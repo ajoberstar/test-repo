@@ -6,6 +6,7 @@ package org.ajoberstar.test;
  * Adding something to push.
  * Adding something to push.
  * Adding something to push.
+ * Adding something to push.
  */
 public class MyClass {
 	public static void main(String[] args) {
