@@ -24,7 +24,7 @@ release {
 		builder.append(version)
 		builder.append('\n\n')
 		grgit.log {
-			range "v${version.nearest.normal.toString()}", 'HEAD'
+			range "v${version.nearest.normal.toString()}^{commit}", 'HEAD'
 		}.inject(builder) { bldr, commit ->
 			bldr.append('- ')
 			bldr.append(commit.shortMessage)
