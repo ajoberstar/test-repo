@@ -18,6 +18,20 @@ release {
 	grgit = Grgit.open(project.file('.'))
 	releaseTasks = ['build']
 	enforceSinceTags = true
+	generateTagMessage = { version ->
+		StringBuilder builder = new StringBuilder()
+		builder.append('Release of ')
+		builder.append(version)
+		builder.append('\n\n')
+		grgit.log {
+			range version.nearest.normal.toString(), 'HEAD'
+		}.inject(builder) { builder, commit ->
+			builder.append('- ')
+			builder.append(commit.shortMessage)
+			builder.append('\n')
+		}
+		builder.toString()
+	}
 }
 
 wrapper {

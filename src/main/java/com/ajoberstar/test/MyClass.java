@@ -13,7 +13,7 @@ package org.ajoberstar.test;
  * Adding something to push.
  * Adding something to push.
  * Adding something to push.
- * @since 0.2.1
+ * @since 0.3.0
  */
 public class MyClass {
 	public static void main(String[] args) {
