@@ -1,0 +1,24 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.ajoberstar:gradle-git:latest.integration'
+	}
+}
+
+apply plugin: 'grgit-release'
+apply plugin: 'java'
+
+import org.ajoberstar.grgit.*
+
+release {
+	grgit = Grgit.open(project.file('.'))
+	releaseTasks = ['build']
+}
+
+wrapper {
+	gradleVersion = '1.11'
+}
