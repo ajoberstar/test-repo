@@ -25,10 +25,10 @@ release {
 		builder.append('\n\n')
 		grgit.log {
 			range version.nearest.normal.toString(), 'HEAD'
-		}.inject(builder) { builder, commit ->
-			builder.append('- ')
-			builder.append(commit.shortMessage)
-			builder.append('\n')
+		}.inject(builder) { bldr, commit ->
+			bldr.append('- ')
+			bldr.append(commit.shortMessage)
+			bldr.append('\n')
 		}
 		builder.toString()
 	}
