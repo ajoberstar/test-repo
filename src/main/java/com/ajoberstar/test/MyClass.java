@@ -1,3 +1,8 @@
+/*
+ * /*
+ *  * Testing license.
+ *  */
+ */
 package org.ajoberstar.test;
 
 /**
