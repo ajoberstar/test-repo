@@ -3,36 +3,15 @@ buildscript {
 		mavenLocal()
 		jcenter()
 		mavenCentral()
+		maven { url 'http://dl.bintray.com/ajoberstar/temp-forks' }
 	}
 	dependencies {
-		classpath 'org.ajoberstar:gradle-git:latest.integration'
+		classpath 'org.ajoberstar:gradle-ajoberstar:latest.integration'
 	}
 }
 
-apply plugin: 'grgit-release'
 apply plugin: 'java'
-
-import org.ajoberstar.grgit.*
-
-release {
-	grgit = Grgit.open(project.file('.'))
-	releaseTasks = ['build']
-	enforceSinceTags = true
-	generateTagMessage = { version ->
-		StringBuilder builder = new StringBuilder()
-		builder.append('Release of ')
-		builder.append(version)
-		builder.append('\n\n')
-		grgit.log {
-			range "v${version.nearest.normal.toString()}^{commit}", 'HEAD'
-		}.inject(builder) { bldr, commit ->
-			bldr.append('- ')
-			bldr.append(commit.shortMessage)
-			bldr.append('\n')
-		}
-		builder.toString()
-	}
-}
+apply plugin: 'ajoberstar'
 
 wrapper {
 	gradleVersion = '1.11'
