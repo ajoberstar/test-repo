@@ -12,6 +12,8 @@ buildscript {
 
 import org.ajoberstar.grgit.*
 
+group = 'org.ajoberstar'
+
 apply plugin: 'grgit-release'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
