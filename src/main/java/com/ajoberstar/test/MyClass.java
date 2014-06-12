@@ -17,6 +17,7 @@ package org.ajoberstar.test;
  * Adding something to push.
  * Adding something to push.
  * Adding something to push.
+ * Adding something to push.
  * @since 0.3.0
  */
 public class MyClass {
