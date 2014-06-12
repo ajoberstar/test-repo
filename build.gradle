@@ -6,7 +6,7 @@ buildscript {
 		maven { url 'http://dl.bintray.com/ajoberstar/temp-forks' }
 	}
 	dependencies {
-		classpath 'org.ajoberstar:gradle-git:latest.integration'
+		classpath 'org.ajoberstar:gradle-ajoberstar:latest.integration'
 	}
 }
 
@@ -14,24 +14,16 @@ import org.ajoberstar.grgit.*
 
 group = 'org.ajoberstar'
 
-apply plugin: 'grgit-release'
-apply plugin: 'maven-publish'
 apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'bintray'
+apply plugin: 'ajoberstar'
 
-release {
-	grgit = Grgit.open(project.file('.'))
-	releaseTasks = ['build', 'publishToMavenLocal']
-}
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-	repositories {
-		mavenLocal()
-	}
+ajoberstar {
+	friendlyName = 'Test repository'
+	description = 'Test repository for plugins.'
+	bintrayRepo = 'test'
+	copyrightYears = '2014'
 }
 
 wrapper {
