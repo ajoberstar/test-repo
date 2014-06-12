@@ -10,6 +10,7 @@ buildscript {
 }
 
 apply plugin: 'grgit-release'
+apply plugin: 'maven-publish'
 apply plugin: 'java'
 
 import org.ajoberstar.grgit.*
