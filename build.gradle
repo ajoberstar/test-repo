@@ -18,6 +18,7 @@ apply plugin: 'java'
 
 release {
 	grgit = Grgit.open(project.file('.'))
+	releaseTasks = ['publishToMavenLocal']
 }
 
 wrapper {
