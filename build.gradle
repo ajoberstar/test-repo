@@ -14,10 +14,10 @@ import org.ajoberstar.grgit.*
 
 group = 'org.ajoberstar'
 
+apply plugin: 'ajoberstar'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'bintray'
-apply plugin: 'ajoberstar'
 
 ajoberstar {
 	friendlyName = 'Test repository'
