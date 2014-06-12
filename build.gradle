@@ -6,13 +6,19 @@ buildscript {
 		maven { url 'http://dl.bintray.com/ajoberstar/temp-forks' }
 	}
 	dependencies {
-		classpath 'org.ajoberstar:gradle-ajoberstar:latest.integration'
+		classpath 'org.ajoberstar:gradle-git:latest.integration'
 	}
 }
+
+import org.ajoberstar.grgit.*
 
 apply plugin: 'grgit-release'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
+
+release {
+	grgit = Grgit.open(project.file('.'))
+}
 
 wrapper {
 	gradleVersion = '1.11'
