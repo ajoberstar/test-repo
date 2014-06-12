@@ -23,6 +23,7 @@ ajoberstar {
 	friendlyName = 'Test repository'
 	description = 'Test repository for plugins.'
 	bintrayRepo = 'test'
+	bintrayLabels = ['test']
 	copyrightYears = '2014'
 }
 
