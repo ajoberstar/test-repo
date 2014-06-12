@@ -21,6 +21,17 @@ release {
 	releaseTasks = ['publishToMavenLocal']
 }
 
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		mavenLocal()
+	}
+}
+
 wrapper {
 	gradleVersion = '1.11'
 }
