@@ -6,14 +6,37 @@ buildscript {
 		maven { url 'http://dl.bintray.com/ajoberstar/temp-forks' }
 	}
 	dependencies {
-		classpath 'org.ajoberstar:gradle-ajoberstar:latest.integration'
+		// classpath 'org.ajoberstar:gradle-git:0.11.0-milestone.1+7d44943'
+		// classpath 'org.ajoberstar:gradle-git:0.11.0-dev.26+e9c67ee'
+		classpath 'org.ajoberstar:gradle-ajoberstar:0.1.+'
 	}
+
+
 }
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'ajoberstar'
 
+// apply plugin: 'org.ajoberstar.github-pages'
+
+// plugins {
+// 	id 'org.ajoberstar.github-pages' version '0.10.0-milestone.1+fcc896a'
+// }
+
+ajoberstar {
+	copyrightYears = '2014'
+}
+
+githubPages {
+	repoUri = 'git@github.com:ajoberstar/test-repo.git'
+	// targetBranch = 'other'
+	pages {
+		// from 'src/main/pages2'
+		from 'src/main/pages'
+	}
+}
+
 wrapper {
-	gradleVersion = '1.11'
+	gradleVersion = '2.1'
 }
