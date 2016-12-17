@@ -1,10 +1,39 @@
 #!/usr/bin/env groovy
-node {
-  stage 'Checkout'
-  checkout scm
 
-  stage 'Publish Site'
-  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS']]) {
-    sh './gradlew gitPublishPush'
+milestone 0
+stage('Test and Analyze') {
+  gradle null, 'dev', 'check sonarqube'
+  junit '**/build/test-results/**/TEST-*.xml'
+}
+
+milestone 1
+stage('Milestone') {
+  input message: 'Publish as milestone?'
+  gradle null, 'milestone', 'bintrayUpload release'
+}
+
+milestone 2
+stage('RC') {
+  input message: 'Publish as rc?'
+  gradle null, 'rc', 'bintrayUpload release'
+}
+
+milestone 3
+stage('Final') {
+  input message: 'Publish as final?'
+  gradle null, 'final', 'gitPublishPush bintrayUpload release'
+}
+
+def gradle(String scope, String stage, String args) {
+  node {
+    checkout scm
+    withCredentials([
+      usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS'),
+      usernamePassword(credentialsId: 'fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5', usernameVariable: 'BINTRAY_USER', passwordVariable: 'BINTRAY_KEY')
+    ]) {
+      withSonarQubeEnv('SonarQube') {
+        sh './gradlew -Psemver.scope=${scope} -Psemver.stage=${stage} ${args}'
+      }
+    }
   }
 }
