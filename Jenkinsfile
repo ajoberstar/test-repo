@@ -25,7 +25,7 @@ stage('Final') {
 
 def gradle(String scope, String stage, String args) {
   node {
-    echo "$scm"
+    sh 'git branch -avv'
     checkout scm
     withCredentials([
       usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS'),
