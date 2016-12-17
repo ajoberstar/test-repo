@@ -31,6 +31,7 @@ if (BRANCH_NAME == 'master') {
 } else {
     stage('Unsupported') {
       echo 'Nothing\'s going to happen.'
+      sh 'echo "face"'
     }
 }
 
