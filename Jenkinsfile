@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
 tokens = "${JOB_NAME}".tokenize('/')
-owner = tokens[tokens.size()-3]
-repo = tokens[tokens.size()-2]
+repoOwner = tokens[tokens.size()-3]
+repoName = tokens[tokens.size()-2]
 
 if (BRANCH_NAME == 'master') {
   milestone 0
@@ -50,7 +50,7 @@ def gradle(scope, stage, args, preview) {
         try {
           additionalArgs = ''
           if (preview) {
-            additionalArgs = "-Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.repository=${owner}/${repo} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
+            additionalArgs = "-Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.repository=${repoOwner}/${repoName} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
           }
           sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
         } finally {
