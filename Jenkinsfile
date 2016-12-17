@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-if (BRANCH_NAME == 'master') {
+if (env.BRANCH_NAME == 'master') {
   milestone 0
   stage('Test and Analyze') {
     gradle null, 'dev', 'clean check sonarqube'
@@ -23,7 +23,7 @@ if (BRANCH_NAME == 'master') {
     input message: 'Publish as final?'
     gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
   }
-} else if (CHANGE_ID) {
+} else if (env.CHANGE_ID) {
   milestone 4
   stage('Test and Analyze') {
     gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=$GRGIT_PASS -Dsonar.analysis.mode=preview"
