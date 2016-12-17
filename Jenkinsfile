@@ -24,9 +24,9 @@ if (env.BRANCH_NAME == 'master') {
     gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
   }
 } else if (env.CHANGE_ID) {
-  milestone 4
+  milestone 0
   stage('Test and Analyze') {
-    gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=$GRGIT_PASS -Dsonar.analysis.mode=preview"
+    gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
   }
 } else {
     stage('Unsupported') {
