@@ -38,25 +38,26 @@ if (BRANCH_NAME == 'master') {
     }
 }
 
-
 def gradle(scope, stage, args, preview) {
   node {
-    checkout scm
-    withCredentials([
-      usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS'),
-      usernamePassword(credentialsId: 'fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5', usernameVariable: 'BINTRAY_USER', passwordVariable: 'BINTRAY_KEY')
-    ]) {
-      withSonarQubeEnv('SonarQube') {
-        try {
-          additionalArgs = ''
-          if (preview) {
-            additionalArgs = "-Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
+    dir(repoName) {
+      checkout scm
+      withCredentials([
+        usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS'),
+        usernamePassword(credentialsId: 'fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5', usernameVariable: 'BINTRAY_USER', passwordVariable: 'BINTRAY_KEY')
+      ]) {
+        withSonarQubeEnv('SonarQube') {
+          try {
+            additionalArgs = ''
+            if (preview) {
+              additionalArgs = "-Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
+            }
+            sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
+            } finally {
+              junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
+            }
           }
-          sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
-        } finally {
-          junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
         }
-      }
     }
   }
 }

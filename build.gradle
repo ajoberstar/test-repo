@@ -14,10 +14,6 @@ plugins {
     id 'org.sonarqube' version '2.2.1'
 }
 
-println System.properties['sonar.github.repository']
-println System.properties['sonar.github.pullrequest']
-println System.properties['sonar.github.oauth']
-
 apply plugin: 'org.ajoberstar.semver-vcs-grgit'
 
 group = 'org.ajoberstar'
