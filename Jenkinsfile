@@ -54,7 +54,7 @@ def gradle(scope, stage, args, preview) {
           }
           sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
         } finally {
-          junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
+          // junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
         }
       }
     }
