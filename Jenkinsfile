@@ -2,8 +2,13 @@
 
 milestone 0
 stage('Test and Analyze') {
-  gradle null, 'dev', 'check sonarqube'
-  junit '**/build/test-results/**/TEST-*.xml'
+  try {
+    gradle null, 'dev', 'check sonarqube'
+  } catch (err) {
+    junit '**/build/test-results/**/TEST-*.xml'
+    throw err
+  }
+
 }
 
 milestone 1
