@@ -1,7 +1,10 @@
 package org.ajoberstar;
 
+import java.util.Optional;
+
 /**
  * Some docs.
+ * Testing a PR
  * @since 0.3.0
  */
 public class MyClass {
