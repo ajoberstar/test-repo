@@ -26,8 +26,8 @@ if (BRANCH_NAME == 'master') {
 } else if (CHANGE_ID) {
   milestone 0
   stage('Check') {
-    withCredentials([usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', passwordVariable: 'GIT_TOKEN')]) {
-      gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=\"${GIT_TOKEN}\" -Dsonar.analysis.mode=preview"
+    withCredentials([usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+      gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=${GIT_TOKEN} -Dsonar.analysis.mode=preview"
     }
   }
 } else {
