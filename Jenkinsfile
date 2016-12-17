@@ -34,7 +34,7 @@ def gradle(String scope, String stage, String args) {
     ]) {
       withSonarQubeEnv('SonarQube') {
         try {
-          sh "./gradlew -Psemver.stage=${stage} ${args}"
+          sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args}"
         } finally {
           junit '**/build/test-results/**/TEST-*.xml'
         }
