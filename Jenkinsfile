@@ -32,7 +32,7 @@ def gradle(String scope, String stage, String args) {
       usernamePassword(credentialsId: 'fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5', usernameVariable: 'BINTRAY_USER', passwordVariable: 'BINTRAY_KEY')
     ]) {
       withSonarQubeEnv('SonarQube') {
-        sh './gradlew -Psemver.scope=${scope} -Psemver.stage=${stage} ${args}'
+        sh './gradlew -Psemver.stage=${stage} ${args}'
       }
     }
   }
