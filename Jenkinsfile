@@ -2,6 +2,8 @@
 
 milestone 0
 stage('Test and Analyze') {
+  echo "$JOB_NAME"
+  echo "$JOB_BASE_NAME"
   gradle null, 'dev', 'check sonarqube'
 }
 
