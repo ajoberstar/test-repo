@@ -4,25 +4,25 @@ milestone 0
 stage('Test and Analyze') {
   echo "$JOB_NAME"
   echo "$JOB_BASE_NAME"
-  gradle null, 'dev', 'check sonarqube'
+  gradle null, 'dev', 'clean check sonarqube'
 }
 
 milestone 1
 stage('Milestone') {
   input message: 'Publish as milestone?'
-  gradle null, 'milestone', 'bintrayUpload release'
+  gradle null, 'milestone', 'clean bintrayUpload release'
 }
 
 milestone 2
 stage('RC') {
   input message: 'Publish as rc?'
-  gradle null, 'rc', 'bintrayUpload release'
+  gradle null, 'rc', 'clean bintrayUpload release'
 }
 
 milestone 3
 stage('Final') {
   input message: 'Publish as final?'
-  gradle null, 'final', 'gitPublishPush bintrayUpload release'
+  gradle null, 'final', 'clean gitPublishPush bintrayUpload release'
 }
 
 def gradle(String scope, String stage, String args) {
