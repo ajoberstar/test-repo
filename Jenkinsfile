@@ -1,5 +1,9 @@
 #!/usr/bin/env groovy
 
+tokens = "${JOB_NAME}".tokenize('/')
+owner = tokens[tokens.size()-3]
+repo = tokens[tokens.size()-2]
+
 if (BRANCH_NAME == 'master') {
   milestone 0
   stage('Check') {
@@ -26,20 +30,16 @@ if (BRANCH_NAME == 'master') {
 } else if (CHANGE_ID) {
   milestone 0
   stage('Check') {
-    echo "What's going on!"
-    withCredentials([usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-      gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.analysis.mode=preview"
-    }
+    gradle null, 'dev', 'clean check sonarqube', true
   }
 } else {
     stage('Unsupported') {
       echo 'Nothing\'s going to happen.'
-      sh 'echo "face"'
     }
 }
 
 
-def gradle(scope, stage, args) {
+def gradle(scope, stage, args, preview) {
   node {
     checkout scm
     withCredentials([
@@ -48,7 +48,11 @@ def gradle(scope, stage, args) {
     ]) {
       withSonarQubeEnv('SonarQube') {
         try {
-          sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args}"
+          additionalArgs = ''
+          if (preview) {
+            additionalArgs = "-Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.repository=${owner}/${repo} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
+          }
+          sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
         } finally {
           junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
         }
