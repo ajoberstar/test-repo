@@ -2,32 +2,31 @@
 
 if (env.BRANCH_NAME == 'master') {
   milestone 0
-  stage('Test and Analyze') {
+  stage('Check') {
     gradle null, 'dev', 'clean check sonarqube'
   }
 
   milestone 1
-  stage('Milestone') {
+  stage('Milestone Publish') {
     input message: 'Publish as milestone?'
     gradle null, 'milestone', 'clean bintrayUpload tagVersion'
   }
 
   milestone 2
-  stage('RC') {
-    input message: 'Publish as rc?'
+  stage('RC Publish') {
+    input message: 'Publish as release candidate?'
     gradle null, 'rc', 'clean bintrayUpload tagVersion'
   }
 
   milestone 3
-  stage('Final') {
+  stage('Final Publish') {
     input message: 'Publish as final?'
     gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
   }
 } else if (env.CHANGE_ID) {
   milestone 0
-  stage('Test and Analyze PR') {
-    gradle null, 'dev', 'clean check sonarqube'
-    // gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
+  stage('Check') {
+    gradle null, 'dev', 'clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=123 -Dsonar.analysis.mode=preview'
   }
 } else {
     stage('Unsupported') {
