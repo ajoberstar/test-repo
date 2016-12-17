@@ -50,11 +50,11 @@ def gradle(scope, stage, args, preview) {
         try {
           additionalArgs = ''
           if (preview) {
-            additionalArgs = "-Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.repository=${repoOwner}/${repoName} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
+            additionalArgs = "-Dsonar.github.pullrequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
           }
           sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
         } finally {
-          // junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
+          junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
         }
       }
     }
