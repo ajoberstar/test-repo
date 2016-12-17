@@ -26,7 +26,8 @@ if (env.BRANCH_NAME == 'master') {
 } else if (env.CHANGE_ID) {
   milestone 0
   stage('Test and Analyze PR') {
-    gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
+    gradle null, 'dev', 'clean check sonarqube'
+    // gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=${GRGIT_PASS} -Dsonar.analysis.mode=preview"
   }
 } else {
     stage('Unsupported') {
@@ -36,7 +37,7 @@ if (env.BRANCH_NAME == 'master') {
 }
 
 
-def gradle(String scope, String stage, String args) {
+def gradle(scope, stage, args) {
   node {
     checkout scm
     withCredentials([
