@@ -1,4 +1,4 @@
-package org.ajoberstar;
+package com.ajoberstar;
 
 import org.junit.Test;
 
