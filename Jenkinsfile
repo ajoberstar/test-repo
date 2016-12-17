@@ -1,27 +1,39 @@
 #!/usr/bin/env groovy
 
-milestone 0
-stage('Test and Analyze') {
-  gradle null, 'dev', 'clean check sonarqube'
+if (BRANCH_NAME == 'master') {
+  milestone 0
+  stage('Test and Analyze') {
+    gradle null, 'dev', 'clean check sonarqube'
+  }
+
+  milestone 1
+  stage('Milestone') {
+    input message: 'Publish as milestone?'
+    gradle null, 'milestone', 'clean bintrayUpload tagVersion'
+  }
+
+  milestone 2
+  stage('RC') {
+    input message: 'Publish as rc?'
+    gradle null, 'rc', 'clean bintrayUpload tagVersion'
+  }
+
+  milestone 3
+  stage('Final') {
+    input message: 'Publish as final?'
+    gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
+  }
+} else if (CHANGE_ID) {
+  milestone 0
+  stage('Test and Analyze') {
+    gradle null, 'dev', "clean check sonarqube -Dsonar.github.pullrequest=${CHANGE_ID} -Dsonar.github.oauth=$GRGIT_PASS -Dsonar.analysis.mode=preview"
+  }
+} else {
+    stage('Unsupported') {
+      echo 'Nothing\'s going to happen.'
+    }
 }
 
-milestone 1
-stage('Milestone') {
-  input message: 'Publish as milestone?'
-  gradle null, 'milestone', 'clean bintrayUpload tagVersion'
-}
-
-milestone 2
-stage('RC') {
-  input message: 'Publish as rc?'
-  gradle null, 'rc', 'clean bintrayUpload tagVersion'
-}
-
-milestone 3
-stage('Final') {
-  input message: 'Publish as final?'
-  gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
-}
 
 def gradle(String scope, String stage, String args) {
   node {
