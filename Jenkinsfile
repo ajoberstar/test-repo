@@ -8,19 +8,19 @@ stage('Test and Analyze') {
 milestone 1
 stage('Milestone') {
   input message: 'Publish as milestone?'
-  gradle null, 'milestone', 'clean bintrayUpload release'
+  gradle null, 'milestone', 'clean bintrayUpload tagVersion'
 }
 
 milestone 2
 stage('RC') {
   input message: 'Publish as rc?'
-  gradle null, 'rc', 'clean bintrayUpload release'
+  gradle null, 'rc', 'clean bintrayUpload tagVersion'
 }
 
 milestone 3
 stage('Final') {
   input message: 'Publish as final?'
-  gradle null, 'final', 'clean gitPublishPush bintrayUpload release'
+  gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
 }
 
 def gradle(String scope, String stage, String args) {

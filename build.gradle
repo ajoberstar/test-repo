@@ -9,7 +9,6 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'org.ajoberstar.grgit' version '1.6.0'
-    id 'org.ajoberstar.release-experimental' version '1.6.0'
   	id 'org.ajoberstar.git-publish' version '0.1.0'
     id 'com.jfrog.bintray' version '1.7.3'
     id 'org.sonarqube' version '2.2.1'
@@ -46,6 +45,14 @@ task sourcesJar(type: Jar) {
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from tasks.javadoc.outputs.files
+}
+
+task tagVersion {
+  doLast {
+    def tagName = project.version.toString()
+    grgit.tag.add(name: project.version.toString(), message: "Release of ${tagName}")
+    grgit.push(refsOrSpecs: [tagName])
+  }
 }
 
 publishing {
