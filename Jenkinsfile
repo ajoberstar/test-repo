@@ -2,13 +2,7 @@
 
 milestone 0
 stage('Test and Analyze') {
-  try {
-    gradle null, 'dev', 'check sonarqube'
-  } catch (err) {
-    junit '**/build/test-results/**/TEST-*.xml'
-    throw err
-  }
-
+  gradle null, 'dev', 'check sonarqube'
 }
 
 milestone 1
@@ -37,7 +31,11 @@ def gradle(String scope, String stage, String args) {
       usernamePassword(credentialsId: 'fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5', usernameVariable: 'BINTRAY_USER', passwordVariable: 'BINTRAY_KEY')
     ]) {
       withSonarQubeEnv('SonarQube') {
-        sh "./gradlew -Psemver.stage=${stage} ${args}"
+        try {
+          sh "./gradlew -Psemver.stage=${stage} ${args}"
+        } finally {
+          junit '**/build/test-results/**/TEST-*.xml'
+        }
       }
     }
   }
