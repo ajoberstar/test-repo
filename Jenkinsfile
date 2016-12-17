@@ -7,25 +7,25 @@ repoName = tokens[tokens.size()-2]
 if (BRANCH_NAME == 'master') {
   milestone 0
   stage('Check') {
-    gradle null, 'dev', 'clean check sonarqube'
+    gradle null, 'dev', 'clean check sonarqube', false
   }
 
   milestone 1
   stage('Milestone Publish') {
     input message: 'Publish as milestone?'
-    gradle null, 'milestone', 'clean bintrayUpload tagVersion'
+    gradle null, 'milestone', 'clean bintrayUpload tagVersion', false
   }
 
   milestone 2
   stage('RC Publish') {
     input message: 'Publish as release candidate?'
-    gradle null, 'rc', 'clean bintrayUpload tagVersion'
+    gradle null, 'rc', 'clean bintrayUpload tagVersion', false
   }
 
   milestone 3
   stage('Final Publish') {
     input message: 'Publish as final?'
-    gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion'
+    gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
   }
 } else if (CHANGE_ID) {
   milestone 0
