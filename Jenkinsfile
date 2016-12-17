@@ -3,5 +3,5 @@ node {
   checkout scm
 
   stage 'Publish Site'
-  sh './gradlew gitPublishPush'
+  sh './gradlew gitPublishPush --stacktrace'
 }
