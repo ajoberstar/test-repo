@@ -11,20 +11,27 @@ if (BRANCH_NAME == 'master') {
   }
 
   milestone 1
-  stage('Publish') {
+  stage('Publish?') {
     timeout(time: 6, unit: 'HOURS') {
       publishStage = input message: 'Publish as:', parameters: [[$class: 'ChoiceParameterDefinition', choices: 'milestone\nrc', name: 'stage']]
     }
     milestone 2
+  }
+
+  stage("Publish ${publishStage}") {
     gradle null, publishStage, 'clean bintrayUpload tagVersion', false
   }
 
   if (publishStage == 'rc') {
-    stage('Release') {
+    milestone 3
+    stage('Release?') {
       timeout(time: 7, unit: 'DAYS') {
         input message: 'Release?'
       }
-      milestone 3
+      milestone 4
+    }
+
+    stage('Final Release') {
       gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
     }
   }
