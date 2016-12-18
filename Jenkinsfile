@@ -7,7 +7,7 @@ repoName = tokens[tokens.size()-2]
 if (BRANCH_NAME == 'master') {
   stage('Check') {
     milestone 0
-    gradle null, 'dev', 'clean check sonarqube', false
+    gradle null, null, 'clean check sonarqube', false
   }
 
   milestone 1
@@ -52,9 +52,12 @@ def gradle(scope, stage, args, preview) {
           try {
             additionalArgs = ''
             if (preview) {
-              additionalArgs = "-Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
+              additionalArgs = " -Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
             }
-            sh "./gradlew --no-daemon -Psemver.stage=${stage} ${args} ${additionalArgs}"
+            if (stage) {
+              additionalArgs = " -Psemver.stage=${stage}"
+            }
+            sh "./gradlew --no-daemon ${args} ${additionalArgs}"
             } finally {
               junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
             }
