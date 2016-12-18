@@ -11,20 +11,20 @@ if (BRANCH_NAME == 'master') {
   }
 
   stage('Milestone Publish') {
-    milestone 1
     input message: 'Publish as milestone?'
+    milestone 1
     gradle null, 'milestone', 'clean bintrayUpload tagVersion', false
   }
 
   stage('RC Publish') {
-    milestone 2
     input message: 'Publish as release candidate?'
+    milestone 2
     gradle null, 'rc', 'clean bintrayUpload tagVersion', false
   }
 
   stage('Final Publish') {
-    milestone 3
     input message: 'Publish as final?'
+    milestone 3
     gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
   }
 } else if (CHANGE_ID) {
