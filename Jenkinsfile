@@ -18,22 +18,36 @@ if (BRANCH_NAME == 'master') {
     milestone 2
   }
 
-  stage("Publish ${publishStage}") {
-    gradle null, publishStage, 'clean bintrayUpload tagVersion', false
+  stage("Publish Milestone") {
+    if (publishStage == 'milestone') {
+      gradle null, publishStage, 'clean bintrayUpload tagVersion', false
+    } else {
+      currentBuild.result = 'NOT_EXECUTED'
+    }
   }
 
-  if (publishStage == 'rc') {
-    milestone 3
-    stage('Release?') {
+  stage("Publish RC") {
+    if (publishStage == 'rc') {
+      gradle null, publishStage, 'clean bintrayUpload tagVersion', false
+    } else {
+      currentBuild.result = 'NOT_EXECUTED'
+    }
+  }
+
+  milestone 3
+  stage('Release?') {
+    if (publishStage == 'rc') {
       timeout(time: 7, unit: 'DAYS') {
         input message: 'Release?'
       }
       milestone 4
+    } else {
+      currentBuild.result = 'NOT_EXECUTED'
     }
+  }
 
-    stage('Final Release') {
-      gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
-    }
+  stage('Final Release') {
+    gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
   }
 } else if (CHANGE_ID) {
   stage('Check') {
