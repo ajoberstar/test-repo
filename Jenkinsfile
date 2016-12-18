@@ -21,7 +21,9 @@ if (BRANCH_NAME == 'master') {
 
   if (publishStage == 'rc') {
     stage('Release') {
-      input message: 'Release?'
+      timeout(time: 7, unit: 'DAYS') {
+        input message: 'Release?'
+      }
       milestone 3
       gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
     }
