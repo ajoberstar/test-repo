@@ -10,22 +10,20 @@ if (BRANCH_NAME == 'master') {
     gradle null, 'dev', 'clean check sonarqube', false
   }
 
-  stage('Milestone Publish') {
-    input message: 'Publish as milestone?'
-    milestone 1
-    gradle null, 'milestone', 'clean bintrayUpload tagVersion', false
-  }
-
-  stage('RC Publish') {
-    input message: 'Publish as release candidate?'
+  milestone 1
+  stage('Publish') {
+    timeout(time: 6, unit: 'HOURS')
+    input message: 'Publish as:', parameters: [[$class: 'ChoiceParameterDefinition', choices: ['milestone', 'rc'] as String[], name: 'publishStage']]
     milestone 2
-    gradle null, 'rc', 'clean bintrayUpload tagVersion', false
+    gradle null, publishStage, 'clean bintrayUpload tagVersion', false
   }
 
-  stage('Final Publish') {
-    input message: 'Publish as final?'
-    milestone 3
-    gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
+  if (publishStage == 'rc') {
+    stage('Release') {
+      input message: 'Release?'
+      milestone 3
+      gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
+    }
   }
 } else if (CHANGE_ID) {
   stage('Check') {
