@@ -52,10 +52,10 @@ def gradle(scope, stage, args, preview) {
           try {
             additionalArgs = ''
             if (preview) {
-              additionalArgs = " -Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
+              additionalArgs += " -Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
             }
             if (stage) {
-              additionalArgs = " -Psemver.stage=${stage}"
+              additionalArgs += " -Psemver.stage=${stage}"
             }
             sh "./gradlew --no-daemon ${args} ${additionalArgs}"
             } finally {
