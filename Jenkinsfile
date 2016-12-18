@@ -13,7 +13,7 @@ if (BRANCH_NAME == 'master') {
   milestone 1
   stage('Publish') {
     timeout(time: 6, unit: 'HOURS') {
-      input message: 'Publish as:', parameters: [[$class: 'ChoiceParameterDefinition', choices: 'milestone\nrc', name: 'publishStage']]
+      publishStage = input message: 'Publish as:', parameters: [[$class: 'ChoiceParameterDefinition', choices: 'milestone\nrc', name: 'stage']]
     }
     milestone 2
     gradle null, publishStage, 'clean bintrayUpload tagVersion', false
