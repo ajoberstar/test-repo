@@ -1,9 +1,13 @@
 buildscript {
   repositories {
     jcenter()
+    maven {
+      name = 'Plugin Portal'
+      url = 'https://plugins.gradle.org/m2/'
+    }
   }
   dependencies {
-    classpath 'org.ajoberstar:gradle-defaults:0.7.0-rc.4'
+    classpath 'org.ajoberstar:gradle-defaults:0.7.0-rc.10'
   }
 }
 
