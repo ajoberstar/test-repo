@@ -1,3 +1,6 @@
+/*
+ * Testing license.
+ */
 package com.ajoberstar;
 
 import org.junit.Test;
