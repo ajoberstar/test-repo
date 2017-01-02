@@ -1,33 +1,19 @@
 buildscript {
+  repositories {
+    jcenter()
+  }
   dependencies {
-    classpath 'org.ajoberstar:grgit:1.8.0-rc.1'
-    classpath 'org.ajoberstar:semver-vcs-gradle-grgit:0.1.0'
+    classpath 'org.ajoberstar:gradle-defaults:0.7.0-rc.4'
   }
 }
 
 plugins {
-    id 'java'
-    id 'maven-publish'
-    id 'org.ajoberstar.grgit' version '1.6.0'
-  	id 'org.ajoberstar.git-publish' version '0.1.0'
-    id 'com.jfrog.bintray' version '1.7.3'
-    id 'org.sonarqube' version '2.2.1'
+  id 'java'
 }
 
-apply plugin: 'org.ajoberstar.semver-vcs-grgit'
+apply plugin: 'org.ajoberstar.defaults'
 
 group = 'org.ajoberstar'
-
-sonarqube {
-    properties {
-        property 'sonar.projectVersion', version.toString().split('-')[0]
-    }
-}
-
-gitPublish {
-	branch = 'gh-pages'
-	contents.from 'src/main/pages'
-}
 
 repositories {
   jcenter()
@@ -37,58 +23,12 @@ dependencies {
   testCompile 'junit:junit:4.12'
 }
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from tasks.javadoc.outputs.files
-}
-
-task tagVersion {
-  doLast {
-    def tagName = project.version.toString()
-    grgit.tag.add(name: project.version.toString(), message: "Release of ${tagName}")
-    grgit.push(refsOrSpecs: [tagName])
+model {
+  bintray {
+    owner = 'ajoberstar'
+    repo = 'test'
+    pkg = 'test-repo'
   }
-}
-
-publishing {
-    publications {
-        main(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
-}
-
-bintray {
-    user = System.env['BINTRAY_USER']
-    key = System.env['BINTRAY_KEY']
-    publications = ['main']
-    publish = true
-    pkg {
-        repo = 'test'
-        name = 'test-repo'
-        licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/ajoberstar/test-repo'
-        issueTrackerUrl = 'https://github.com/ajoberstar/test-repo/issues'
-        vcsUrl = 'https://github.com/ajoberstar/test-repo.git'
-        labels = ['test']
-        publicDownloadNumbers = true
-        githubRepo = 'ajoberstar/test-repo'
-
-        version {
-            name = project.version
-            vcsTag = project.version
-        }
-    }
 }
 
 wrapper {
