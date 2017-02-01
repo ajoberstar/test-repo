@@ -2,20 +2,20 @@ buildscript {
   repositories {
     jcenter()
     maven {
-      name = 'Plugin Portal'
-      url = 'https://plugins.gradle.org/m2/'
+      url = 'https://dl.bintray.com/ajoberstar/maven/'
     }
   }
   dependencies {
-    classpath 'org.ajoberstar:gradle-defaults:0.7.0-rc.10'
+    classpath 'org.ajoberstar.reckon:reckon-gradle:0.2.0-milestone.1'
   }
 }
 
 plugins {
   id 'java'
+  id 'org.ajoberstar.grgit' version '1.6.0'
 }
 
-apply plugin: 'org.ajoberstar.defaults'
+apply plugin: 'org.ajoberstar.reckon'
 
 group = 'org.ajoberstar'
 
@@ -27,11 +27,18 @@ dependencies {
   testCompile 'junit:junit:4.12'
 }
 
-model {
-  bintray {
-    owner = 'ajoberstar'
-    repo = 'test'
-    pkg = 'test-repo'
+import org.ajoberstar.reckon.core.strategy.*
+import org.ajoberstar.reckon.core.git.*
+
+reckon {
+  vcsInventory = new GitInventorySupplier(grgit.repository.jgit.repository)
+  normal = new ScopeNormalStrategy({ -> System.properties['reckon.scope'] ?: 'minor' })
+  preRelease = new StagePreReleaseStrategy(['dev', 'milestone', 'rc', 'final'] as Set, { -> System.properties['reckon.stage'] })
+}
+
+task version {
+  doLast {
+    println "I reckon this is ${project.version.toString()}"
   }
 }
 
