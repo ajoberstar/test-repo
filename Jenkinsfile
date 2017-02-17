@@ -32,7 +32,6 @@
 // }
 
 
-println scm
 
 tokens = "${JOB_NAME}".tokenize('/')
 repoOwner = tokens[tokens.size()-3]
@@ -40,6 +39,7 @@ repoName = tokens[tokens.size()-2]
 
 if (BRANCH_NAME == 'master') {
   stage('Check') {
+    echo scm
     milestone 0
     gradle null, null, 'clean check sonarqube', false
   }
