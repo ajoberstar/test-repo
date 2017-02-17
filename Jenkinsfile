@@ -2,8 +2,8 @@
 pipeline {
   agent any
   parameters {
-    string(name: 'SCOPE', defaultValue: 'major', description: 'Change Scope?')
-    string(name: 'STAGE', defaultValue: 'dev', description: 'Change Stage?')
+    string(name: 'SCOPE', defaultValue: '', description: 'Change Scope?')
+    string(name: 'STAGE', defaultValue: '', description: 'Change Stage?')
   }
   environment {
     GRGIT_CREDS = credentials('29490691-342d-4fa1-b0dc-1e3e27e8e0fa')
@@ -15,7 +15,7 @@ pipeline {
     // }
     stage('Check') {
       steps {
-        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE}' '-Dreckon.stage=${params.STAGE}'"
+        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE ?: 'minor'}' '-Dreckon.stage=${params.STAGE ?: 'dev'}'"
       }
       post {
         always {
