@@ -32,7 +32,9 @@ pipeline {
     stage('Publish') {
       when { branch 'master' }
       steps {
-        sh "./gradlew tagVersion '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'milestone'}'"
+        withEnv(["GRGIT_USER=${GRGIT_CREDS_USR}", "GRGIT_PASS=${GRGIT_CREDS_PSW}"]]) {
+          sh "./gradlew tagVersion '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'milestone'}'"
+        }
       }
     }
   }
