@@ -15,7 +15,7 @@ pipeline {
     // }
     stage('Check') {
       steps {
-        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'dev'}'"
+        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'milestone'}'"
       }
       post {
         always {
@@ -32,7 +32,7 @@ pipeline {
     stage('Publish') {
       when { branch 'master' }
       steps {
-        sh "./gradlew gitPublishPush bintrayUpload tagVersion"
+        sh "./gradlew tagVersion"
       }
     }
   }
