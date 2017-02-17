@@ -2,8 +2,8 @@
 pipeline {
   agent any
   parameters {
-    string(name: 'SCOPE', defaultValue: '', description: 'Change Scope?')
-    string(name: 'STAGE', defaultValue: '', description: 'Change Stage?')
+    string(name: 'SCOPE', defaultValue: 'major', description: 'Change Scope?')
+    string(name: 'STAGE', defaultValue: 'dev', description: 'Change Stage?')
   }
   environment {
     GRGIT_CREDS = credentials('29490691-342d-4fa1-b0dc-1e3e27e8e0fa')
@@ -21,6 +21,12 @@ pipeline {
         always {
           junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
         }
+      }
+    }
+    stage('Publish?') {
+      when { branch 'master' }
+      steps {
+        input message: 'Publish this version?'
       }
     }
     stage('Publish') {
