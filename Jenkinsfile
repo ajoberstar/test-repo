@@ -32,7 +32,7 @@ pipeline {
     stage('Publish') {
       when { branch 'master' }
       steps {
-        echo 'Publishing...'
+        sh "./gradlew gitPublishPush bintrayUpload tagVersion"
       }
     }
   }
