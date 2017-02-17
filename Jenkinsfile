@@ -15,7 +15,7 @@ pipeline {
     // }
     stage('Check') {
       steps {
-        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'milestone'}'"
+        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE}' '-Dreckon.stage=${params.STAGE}'"
       }
       post {
         always {
@@ -33,7 +33,7 @@ pipeline {
       when { branch 'master' }
       steps {
         withEnv(["GRGIT_USER=${GRGIT_CREDS_USR}", "GRGIT_PASS=${GRGIT_CREDS_PSW}"]) {
-          sh "./gradlew tagVersion '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'milestone'}'"
+          sh "./gradlew tagVersion '-Dreckon.scope=${params.SCOPE}' '-Dreckon.stage=${params.STAGE}'"
         }
       }
     }
