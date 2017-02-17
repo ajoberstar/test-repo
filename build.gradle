@@ -34,7 +34,7 @@ task tagVersion {
   doLast {
     def name = version.toString()
     grgit.tag.add(name: name)
-    grigt.push(refsOrSpecs: [name])
+    grgit.push(refsOrSpecs: [name])
   }
 }
 
