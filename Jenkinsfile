@@ -2,8 +2,8 @@
 pipeline {
   agent any
   parameters {
-    string(name: 'SCOPE', defaultValue: null, description: 'Change Scope?')
-    string(name: 'STAGE', defaultValue: null, description: 'Change Stage?')
+    string(name: 'SCOPE', defaultValue: '', description: 'Change Scope?')
+    string(name: 'STAGE', defaultValue: '', description: 'Change Stage?')
   }
   environment {
     GRGIT_CREDS = credentials('29490691-342d-4fa1-b0dc-1e3e27e8e0fa')
