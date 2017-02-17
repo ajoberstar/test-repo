@@ -15,7 +15,7 @@ pipeline {
     // }
     stage('Check') {
       steps {
-        sh "./gradlew clean check '-Psemver.scope=${params.SCOPE}' '-Psemver.stage=${params.STAGE}'"
+        sh "./gradlew clean check '-reckon.scope=${params.SCOPE}' '-Preckon.stage=${params.STAGE}'"
       }
       post {
         always {
