@@ -32,7 +32,7 @@ pipeline {
     stage('Publish') {
       when { branch 'master' }
       steps {
-        sh "./gradlew tagVersion"
+        sh "./gradlew tagVersion '-Dreckon.scope=${params.SCOPE ?: 'major'}' '-Dreckon.stage=${params.STAGE ?: 'milestone'}'"
       }
     }
   }
