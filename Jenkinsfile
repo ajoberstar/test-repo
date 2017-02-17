@@ -1,5 +1,39 @@
 #!/usr/bin/env groovy
 
+// pipeline {
+//   agent any
+//   parameters {
+//     string(name: 'SCOPE', defaultValue: null, description: 'Change Scope?')
+//     string(name: 'STAGE', defaultValue: null, description: 'Change Stage?')
+//   }
+//   environment {
+//     GRGIT_CREDS = credentials('29490691-342d-4fa1-b0dc-1e3e27e8e0fa')
+//     BINTRAY_CREDS = credentials('fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5')
+//   }
+//   stages {
+//     // stage('PR Check') {
+//     //   when { branch ''}
+//     // }
+//     stage('Check') {
+//       steps {
+//
+//       }
+//       post {
+//         always {
+//           junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
+//         }
+//       }
+//     }
+//     stage('Publish') {
+//       when { branch 'master' }
+//     }
+//     stage('')
+//   }
+// }
+
+
+println scm
+
 tokens = "${JOB_NAME}".tokenize('/')
 repoOwner = tokens[tokens.size()-3]
 repoName = tokens[tokens.size()-2]
