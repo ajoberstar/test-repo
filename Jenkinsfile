@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 pipeline {
-  agent { label 'linux' }
+  agent { label 'jdk8' }
   parameters {
     string(name: 'SCOPE', defaultValue: '', description: 'Change Scope?')
     string(name: 'STAGE', defaultValue: '', description: 'Change Stage?')
