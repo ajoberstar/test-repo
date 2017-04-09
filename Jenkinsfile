@@ -6,8 +6,7 @@ pipeline {
     string(name: 'STAGE', defaultValue: '', description: 'Change Stage?')
   }
   environment {
-    GRGIT_CREDS = credentials('29490691-342d-4fa1-b0dc-1e3e27e8e0fa')
-    BINTRAY_CREDS = credentials('fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5')
+    GRGIT_CREDS = credentials('github-build-token')
   }
   stages {
     // stage('PR Check') {
