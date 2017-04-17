@@ -6,15 +6,12 @@ pipeline {
     string(name: 'STAGE', defaultValue: '', description: 'Change Stage?')
   }
   environment {
-    GRGIT_CREDS = credentials('github-build-token')
+    GRGIT_USER = credentials('github-build-token')
   }
   stages {
-    // stage('PR Check') {
-    //   when { branch ''}
-    // }
     stage('Check') {
       steps {
-        sh "./gradlew clean check '-Dreckon.scope=${params.SCOPE}' '-Dreckon.stage=${params.STAGE}'"
+        sh "./gradlew clean check '-Preckon.scope=${params.SCOPE}' '-Preckon.stage=${params.STAGE}'"
       }
       post {
         always {
@@ -22,89 +19,23 @@ pipeline {
         }
       }
     }
-    stage('Publish?') {
-      when { branch 'master' }
-      steps {
-        input message: 'Publish this version?'
-      }
-    }
     stage('Publish') {
       when { branch 'master' }
       steps {
-        withEnv(["GRGIT_USER=${GRGIT_CREDS_USR}", "GRGIT_PASS=${GRGIT_CREDS_PSW}"]) {
-          sh "./gradlew tagVersion '-Dreckon.scope=${params.SCOPE}' '-Dreckon.stage=${params.STAGE}'"
-        }
+        sh './gradlew publish'
+      }
+    }
+    stage('Release?') {
+      when { branch 'master' }
+      steps {
+        input message: 'Release this version?'
+      }
+    }
+    stage('Release') {
+      when { branch 'master' }
+      steps {
+        sh "./gradlew tagVersion '-Preckon.scope=${params.SCOPE}' '-Preckon.stage=${params.STAGE}'"
       }
     }
   }
 }
-
-
-
-// tokens = "${JOB_NAME}".tokenize('/')
-// repoOwner = tokens[tokens.size()-3]
-// repoName = tokens[tokens.size()-2]
-//
-// if (BRANCH_NAME == 'master') {
-//   stage('Check') {
-//     echo scm
-//     milestone 0
-//     gradle null, null, 'clean check sonarqube', false
-//   }
-//
-//   milestone 1
-//   stage('Publish') {
-//     timeout(time: 6, unit: 'HOURS') {
-//       publishStage = input message: 'Publish as:', parameters: [[$class: 'ChoiceParameterDefinition', choices: 'milestone\nrc', name: 'stage']]
-//     }
-//     milestone 2
-//     gradle null, publishStage, 'clean bintrayUpload tagVersion', false
-//   }
-//
-//   if (publishStage == 'rc') {
-//     milestone 3
-//     stage('Release') {
-//       timeout(time: 7, unit: 'DAYS') {
-//         input message: 'Release?'
-//       }
-//       milestone 4
-//       gradle null, 'final', 'clean gitPublishPush bintrayUpload tagVersion', false
-//     }
-//   }
-// } else if (CHANGE_ID) {
-//   stage('Check') {
-//     milestone 0
-//     gradle null, 'dev', 'clean check sonarqube', true
-//   }
-// } else {
-//     stage('Unsupported') {
-//       echo 'Nothing\'s going to happen.'
-//     }
-// }
-//
-// def gradle(scope, stage, args, preview) {
-//   node {
-//     dir(repoName) {
-//       checkout scm
-//       withCredentials([
-//         usernamePassword(credentialsId: '29490691-342d-4fa1-b0dc-1e3e27e8e0fa', usernameVariable: 'GRGIT_USER', passwordVariable: 'GRGIT_PASS'),
-//         usernamePassword(credentialsId: 'fb3c1aa6-6b30-4f48-ba04-9fa0f489bdc5', usernameVariable: 'BINTRAY_USER', passwordVariable: 'BINTRAY_KEY')
-//       ]) {
-//         withSonarQubeEnv('SonarQube') {
-//           try {
-//             additionalArgs = ''
-//             if (preview) {
-//               additionalArgs += " -Dsonar.github.pullRequest=\"${CHANGE_ID}\" -Dsonar.github.repository=\"${repoOwner}/${repoName}\" -Dsonar.github.oauth=\"${GRGIT_PASS}\" -Dsonar.analysis.mode=preview"
-//             }
-//             if (stage) {
-//               additionalArgs += " -Psemver.stage=${stage}"
-//             }
-//             sh "./gradlew --no-daemon ${args} ${additionalArgs}"
-//             } finally {
-//               junit testResults: '**/build/test-results/**/TEST-*.xml', allowEmptyResults: true
-//             }
-//           }
-//         }
-//     }
-//   }
-// }
